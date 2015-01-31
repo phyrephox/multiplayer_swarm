@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head>
+<title>Socket.IO test</title>
+</head>
+<body>
+words
+<button onclick="test()">button</button>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+ var socket = io();
+ var id;
+ socket.on('onconnected', function(msg){
+  id=msg.id;
+  console.log(id);
+ });
+ socket.on('click', function(msg){
+  console.log('click '+msg.i+' '+msg.k.i);
+ });
+ /*var test={
+  i:0,
+  j:0,
+  k:0,
+ };*/
+ var i=0
+ var test = function(){
+  i++;
+  socket.emit('click',{i:i,j:3,k:{i:i+1}});
+ }
+</script>
+</body>
+</html>
