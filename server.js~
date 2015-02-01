@@ -51,7 +51,7 @@ io.on('connection', function(socket){
    for (var i=0;i<boids.length;i++){
     data[i]={pos:boids[i].pos,vel:boids[i].vel};
    }
-   io.emit('data',data);
+   io.emit('data',boids);
   }
   
   setInterval(sendLoop,66)

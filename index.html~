@@ -71,13 +71,13 @@ your browser does not support html5 canvas</canvas>
   ctx.clearRect(0,0,500,500);
   ctx.beginPath();
   //console.log(msg['boid'+0]);
-  //console.log(msg);
+  console.log(msg);
   for(var i=0;i<msg.length;i++){
    //msg[i].draw(ctx);
    //msg['boid'+i].draw(ctx);
    //msg.draw(ctx);
    //console.log(msg[i]);
-   draw(msg[i].pos,msg[i].vel);
+   //draw(msg[i].pos,msg[i].vel);
   }
   ctx.closePath();
   ctx.stroke();

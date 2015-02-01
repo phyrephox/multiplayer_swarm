@@ -79,7 +79,7 @@ function boid(p,v){
   this.separation(boidset,1.2);
   this.cohesion(boidset,0.01);
   this.adhesion(boidset,0.3);
-  this.boundary(3.6);
+  this.boundary(.6);
   //console.log(this.rules);
   var i;
   for (i=0;i<this.rules.length;i++){

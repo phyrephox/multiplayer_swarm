@@ -11,11 +11,11 @@ your browser does not support html5 canvas</canvas>
 var canvas = document.getElementById("field");
 var ctx = canvas.getContext("2d");
 
-//var b=new boid(new vector(100,100),new vector(5,5));
+var b=new boid(new vector(100,100),new vector(5,5));
 var boids=[];
 var i;
 for (i=0;i<500;i++){
- boids.push(boid.boid(vector.vector(3*i,3*i),vector.vector((i%6)+1,(i%6)+2)));
+ boids.push(new boid(new vector(3*i,3*i),new vector((i%6)+1,(i%6)+2)));
 }
 
 function draw(){

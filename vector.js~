@@ -58,7 +58,7 @@ function vector(x,y){
  this.vectorAdd = function(v1,v2){
   return new vector(v1.x+v2.x,v1.y+v2.y);
  }
- this.vectorSub = function(v1,v2){
+ this.exports.vectorSub = function(v1,v2){
   return new vector(v1.x-v2.x,v1.y-v2.y);
  }
  this.vectorDist = function(v1,v2){
