@@ -4,28 +4,29 @@ var io = require('socket.io')(http);
 var UUID = require('node-uuid');
 var boid = require('./boid');
 var vector = require('./vector');
+var addon = require('./build/Release/addon');
 
 
-var boids=[];
+/*var boids=[];
 for (var i=0;i<200;i++){
  boids.push(new boid(new vector(Math.random()*50+250,Math.random()*50+250),
                      new vector(Math.random()*5-2,Math.random()*5-2)));
-}
+}*/
+var obj = new addon.Boids();
+var objList = [];
 var time = new Date().getTime();
-
 function gameLoop(){
- for (var i=0;i<boids.length;i++){
-  boids[i].interact(boids);
- }
- 
+ objList = obj.getNextFrame();
+ //console.log(objList);
  var newTime = new Date().getTime();
- console.log('gameLoop '+(newTime-time));
+ //console.log('gameLoop '+(newTime-time));
  time=newTime;
  
- setImmediate(gameLoop);
+ //setImmediate(gameLoop);
 }
 
-setImmediate(gameLoop);
+//setImmediate(gameLoop);
+setInterval(gameLoop,10);
 
 app.get('/', function(req,res){
  res.sendFile(__dirname+'/index.html');
@@ -47,14 +48,15 @@ io.on('connection', function(socket){
   });
   
   function sendLoop(){
-   var data=[];
+   /*var data=[];
    for (var i=0;i<boids.length;i++){
     data[i]={pos:boids[i].pos,vel:boids[i].vel};
-   }
-   io.emit('data',data);
+   }*/
+   io.emit('data',objList);
+   //console.log(objList);
   }
   
-  setInterval(sendLoop,66)
+  setInterval(sendLoop,10)
   
 });
 
