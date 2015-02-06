@@ -6,13 +6,13 @@ function vector(x,y){
   this.y=y;
  }
  this.get=function(){
-  return new vector(this.x,this.y);
+  return new vector(x,y);
  }
  this.mag=function(){
-  return Math.sqrt(this.x*this.x+this.y*this.y);
+  return Math.sqrt(x*x+y*y);
  }
  this.angle=function(){
-  return Math.atan2(this.y,this.x);
+  return Math.atan2(y,x);
  }
  this.add=function(other){
   this.x+=other.x;
@@ -39,7 +39,7 @@ function vector(x,y){
   return Math.sqrt(dx*dx+dy*dy);
  }
  this.norm=function(){
-  var m=this.mag();
+  var m=thisi.mag();
   if(m!=0&&m!=1){
    this.div(m);
   }
@@ -49,22 +49,36 @@ function vector(x,y){
   if (this.mag()>max){
    this.norm();
    this.mult(max);
-  } else if(this.mag<min){
+  } else if (this.mag<min){
    this.norm();
    this.mult(min);
   }
   
  }
+ this.vectorAdd = function(v1,v2){
+  return new vector(v1.x+v2.x,v1.y+v2.y);
+ }
+ this.vectorSub = function(v1,v2){
+  return new vector(v1.x-v2.x,v1.y-v2.y);
+ }
+ this.vectorDist = function(v1,v2){
+  var dx=v1.x-v2.x;
+  var dy=v1.y-v2.y;
+  return Math.sqrt(dx*dx+dy*dy);
+ }
+ //return this;
 }
-function vectorAdd(v1,v2){
+/*module.exports.vectorAdd = function(v1,v2){
  return new vector(v1.x+v2.x,v1.y+v2.y);
 }
-function vectorSub(v1,v2){
+module.exports.vectorSub = function(v1,v2){
  return new vector(v1.x-v2.x,v1.y-v2.y);
 }
-function vectorDist(v1,v2){
+module.exports.vectorDist = function(v1,v2){
  var dx=v1.x-v2.x;
  var dy=v1.y-v2.y;
  return Math.sqrt(dx*dx+dy*dy);
-}
+}*/
+
+module.exports=vector;
 

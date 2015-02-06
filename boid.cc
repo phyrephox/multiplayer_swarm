@@ -18,8 +18,8 @@ void Boid::separation(std::vector<Boid*> boidset, double c){
  Vector ans (0,0);
  for (int i=0;i<boidset.size();i++){
   if (this!=boidset[i]){
-   if (Vector::dist(pos,boidset[i]->getPos())<10){
-    ans.sub(Vector::sub(pos,boidset[i]->getPos()));
+   if (Vector::dist(pos,boidset[i]->getPos())<5){
+    ans.sub(Vector::sub(boidset[i]->getPos(),pos));
    }
   }
  }
@@ -67,8 +67,8 @@ void Boid::adhesion(std::vector<Boid*> boidset, double c){
 
 void Boid::boundary(double c){
  Vector ans (0,0);
- if (pos.x > 900){
-  ans.add(90-pos.x/10.0,0);
+ if (pos.x > 1700){
+  ans.add(170-pos.x/10.0,0);
  }
  if (pos.x < 100){
   ans.add(10-pos.x/10.0,0);
@@ -92,17 +92,18 @@ Vector Boid::getVel(){
  return v;
 }
 
-void Boid::interact(std::vector<Boid*> boidset){
+void Boid::interact(std::vector<Boid*> boidset, double delta){
  rules.erase(rules.begin(),rules.end());
- separation(boidset, -1.2);
+ separation(boidset, 1.2);
  cohesion(boidset, .01);
  adhesion(boidset, .3);
  boundary(3.6);
  for (int i=0;i<rules.size();i++){
   vel.add(rules[i]);
-  //std::cout<<rules[i].x<<" "<<rules[i].y<<"\n";
  }
- vel.limit(0,30);
- //std::cout<<pos.x<<" "<<pos.y<<" "<<vel.x<<" "<<vel.y<<"\n\n";
- pos.add(vel);
+ vel.limit(0,20);
+ Vector velDelt = vel.get();
+ velDelt.mult(delta);
+ velDelt.div(30);
+ pos.add(velDelt);
 }

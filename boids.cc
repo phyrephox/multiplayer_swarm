@@ -1,6 +1,7 @@
 #include <node.h>
 #include <v8.h>
 #include <stdlib.h>
+#include <iostream>
 #include "boids.h"
 
 using namespace v8;
@@ -35,12 +36,13 @@ Handle<Value> Boids::New(const Arguments& args) {
     //double value = args[0]->IsUndefined() ? 0 : args[0]->NumberValue();
     Boids* obj = new Boids();
     obj->Wrap(args.This());
-    for (int i=0;i<1000;i++){
+    for (int i=0;i<800;i++){
      Vector* pos = new Vector(rand()%30+200,rand()%30+200);
      Vector* vel = new Vector(rand()%5-2,rand()%5-2);
      Boid* b = new Boid(*pos,*vel);
      obj->boidset.push_back(b);
     }
+    //std::cout<<obj->t<<"\n";
     return args.This();
   } else {
     // Invoked as plain function `MyObject(...)`, turn into construct call.
@@ -62,17 +64,22 @@ Handle<Value> Boids::PlusOne(const Arguments& args) {
 Handle<Value> Boids::GetNextFrame(const Arguments& args){
  HandleScope scope;
  Boids* obj = ObjectWrap::Unwrap<Boids>(args.This());
+ double delta = args[0]->NumberValue();
+ //std::cout<<delta<<std::endl;
  Local<Array> objList = Array::New();
  for (int i=0;i<obj->boidset.size();i++){
-  obj->boidset[i]->interact(obj->boidset);
+  obj->boidset[i]->interact(obj->boidset,delta);
  }
  for (int i=0;i<obj->boidset.size();i++){
   Local<Object> temp = Object::New();
+  //std::cout<<"boid"+i<<"\n";
+  char buffer [10];
+  sprintf(buffer, "Boid%d",i);
   temp->Set(String::New("xpos"),Number::New(obj->boidset[i]->getPos().x));
   temp->Set(String::New("ypos"),Number::New(obj->boidset[i]->getPos().y));
   temp->Set(String::New("xvel"),Number::New(obj->boidset[i]->getVel().x));
   temp->Set(String::New("yvel"),Number::New(obj->boidset[i]->getVel().y));
-  objList->Set(i,temp);
+  objList->Set(String::New(buffer),temp);
  }
  return scope.Close(objList);
 }

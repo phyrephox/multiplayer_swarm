@@ -14,5 +14,5 @@ class Boid{
   Boid(Vector, Vector);
   Vector getPos();
   Vector getVel();
-  void interact(std::vector<Boid*>);
+  void interact(std::vector<Boid*>, double delta);
 };

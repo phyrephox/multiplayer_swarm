@@ -1,5 +1,6 @@
 #include <node.h>
 #include <vector>
+#include <time.h>
 #include "boid.h"
 
 class Boids : public node::ObjectWrap {

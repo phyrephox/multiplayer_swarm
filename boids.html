@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <body>
-<canvas id="field" width="500" height="500" style="border:1px solid #000000;">
+<canvas id="field" width="1800" height="900" style="border:1px solid #000000;">
 your browser does not support html5 canvas</canvas>
 
 <script src="vector.js"></script>
@@ -11,15 +11,15 @@ your browser does not support html5 canvas</canvas>
 var canvas = document.getElementById("field");
 var ctx = canvas.getContext("2d");
 
-//var b=new boid(new vector(100,100),new vector(5,5));
+var b=new boid(new vector(100,100),new vector(5,5));
 var boids=[];
 var i;
-for (i=0;i<500;i++){
- boids.push(boid.boid(vector.vector(3*i,3*i),vector.vector((i%6)+1,(i%6)+2)));
+for (i=0;i<700;i++){
+ boids.push(new boid(new vector(Math.random()*100+250,Math.random()*100+250),new vector((i%6)+1,(i%6)+2)));
 }
 
 function draw(){
- ctx.clearRect(0,0,500,500);
+ ctx.clearRect(0,0,1800,900);
  //console.log(b.pos.x+" "+b.vel.x);
  ctx.beginPath();
  //b.interact();

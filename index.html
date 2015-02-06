@@ -5,18 +5,37 @@
 </head>
 <body>
 
-<button onclick="test()">button</button>
-<canvas id='field' width='1000' height='900' style="border:1px solid #000000;">
+<!--<button onclick="test()">button</button>-->
+<canvas id='field' width='1800' height='900' style="border:1px solid #000000;">
 your browser does not support html5 canvas</canvas>
 
 <script src="/socket.io/socket.io.js"></script>
+<script src='/boid.js'></script>
+<script src='/vector.js'></script>
 <script>
  var ctx = document.getElementById('field').getContext('2d');
  //document.getElementById('field').onkeydown = keyPress;
  window.addEventListener('keydown', keyPress, false);
  
+ var socket = io();
+ var id;
  
- var i=0
+ 
+ var boids=[];
+ for (var i=0;i<800;i++){
+  boids["Boid"+i]=new boid(new vector(0,0),new vector(0,0));
+ }
+ socket.emit('total');
+ socket.on('total', function(msg){
+  console.log('total');
+  for (var prop in msg){
+   if (msg.hasOwnProperty(prop)){
+    boids[prop].set(msg[prop]);
+   }
+  }
+  //boids=msg;
+ });
+ var i=0;
  var test = function(){
   i++;
   socket.emit('click',{i:i,j:3,k:{i:i+1}});
@@ -43,9 +62,6 @@ your browser does not support html5 canvas</canvas>
   socket.emit('key', pos);
  }
  
- var socket = io();
- var id;
- 
  socket.on('onconnected', function(msg){
   id=msg.id;
   console.log(id);
@@ -63,28 +79,59 @@ your browser does not support html5 canvas</canvas>
  });*/
  
  function draw(p){
-  ctx.moveTo(p.xpos,p.ypos);
-  ctx.lineTo(p.xpos-p.xvel,p.ypos-p.yvel);
+  ctx.moveTo(p.pos.x,p.pos.y);
+  ctx.lineTo(p.pos.x-p.vel.x,p.pos.y-p.vel.y);
+  //ctx.moveTo(p.pos.x,p.pos.y);
+  //ctx.lineTo(p.goal.x,p.goal.y);
  }
- 
+ var time = new Date().getTime();
  socket.on('data', function(msg){
   //console.log(msg);
-  ctx.clearRect(0,0,1000,1000);
-  ctx.beginPath();
-  //console.log(msg['boid'+0]);
-  //console.log(msg);
-  for(var i=0;i<msg.length;i++){
-   //msg[i].draw(ctx);
-   //msg['boid'+i].draw(ctx);
-   //msg.draw(ctx);
-   //console.log(msg[i]);
-   draw(msg[i]);
+  //var newTime = new Date().getTime();
+  //var delta = newTime-time;
+  /*for (var prop in boids){
+   if (boids.hasOwnProperty(prop)){
+    //boids[prop].interact(boids,delta);
+   }
+  }*/
+  //console.log(delta);
+  //time=newTime;
+  //console.log(delta);
+  //console.log(boids);
+  if(msg.hasOwnProperty("Boid0")){
+   var now = new Date().getTime();
+   var delta = now-time;
+   console.log(delta);
+   time=now;
   }
+  for (var prop in msg){
+   
+   if(msg.hasOwnProperty(prop)){
+    //console.log(prop+" "+boids[prop].vel.x+" "+boids[prop].vel.y+" "+msg[prop].xvel+" "+msg[prop].yvel);
+    boids[prop].set(msg[prop]);
+    //boids[prop].setGoal(msg[prop].xpos,msg[prop].ypos);
+   }
+  }
+  //console.log(boids['Boid0'].vel.x);
+  
+  ctx.clearRect(0,0,1800,1000);
+  ctx.beginPath();
+  for (var prop in boids){
+   if (boids.hasOwnProperty(prop)){
+    draw(boids[prop]);
+   }
+  }
+  ctx.strokeStyle="black";
   ctx.closePath();
   ctx.stroke();
  });
  
+ function getNextFrame(){
+  socket.emit('frame');
+  window.requestAnimationFrame(getNextFrame);
+ }
  
+ window.requestAnimationFrame(getNextFrame);
  
 </script>
 
