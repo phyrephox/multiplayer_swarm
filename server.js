@@ -8,17 +8,19 @@ var vector = require('./vector');
 var addon = require('./build/Release/addon');
 
 
-
 var obj = new addon.Boids();
 var objList = {};
+var keys = [];
 var time = new Date().getTime();
 function gameLoop(){
  var now = new Date().getTime();
- if (time + 33 < now){
+ if (time + 66 < now){
   var delta = now-time;
-  objList = obj.getNextFrame(delta);
+  objList = obj.getNextFrame(delta,keys);
   time=now;
-  //console.log(delta);
+  //console.log(keys);
+  //console.log(objList);
+  
  }
  if(now-time<16){
   setTimeout(gameLoop);
@@ -55,8 +57,16 @@ io.on('connection', function(socket){
   console.log('click');
   io.emit('click',msg);
  });
- socket.on('key', function(msg){
-  io.emit('key',msg);
+ socket.on('keypress', function(msg){
+  if(keys.indexOf(msg)<0){
+   keys.push(msg);
+  }
+ });
+ socket.on('keyrelease', function(msg){
+  var loc = keys.indexOf(msg);
+  if(loc>=0){
+   keys.splice(loc,1);
+  }
  });
  socket.on('frame', function(msg){
   //gameLoop();
@@ -65,9 +75,11 @@ io.on('connection', function(socket){
    data["Boid"+(index+i)]=objList["Boid"+(index+i)];
    //console.log("Boid"+(index+i));
   }
+  data["Player"]=objList["Player"];
+  //console.log(data["Player"].angle);
   //console.log(data);
   index+=sendSize;
-  index%=800;
+  index%=700;
   socket.emit('data', data);
  });
  

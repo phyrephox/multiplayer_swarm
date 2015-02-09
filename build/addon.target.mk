@@ -68,7 +68,9 @@ OBJS := \
 	$(obj).target/$(TARGET)/addon.o \
 	$(obj).target/$(TARGET)/boids.o \
 	$(obj).target/$(TARGET)/boid.o \
-	$(obj).target/$(TARGET)/vector.o
+	$(obj).target/$(TARGET)/vector.o \
+	$(obj).target/$(TARGET)/gameObj.o \
+	$(obj).target/$(TARGET)/player.o
 
 # Add to the list of files we specially track dependencies for.
 all_deps += $(OBJS)

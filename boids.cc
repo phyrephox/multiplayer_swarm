@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <iostream>
 #include "boids.h"
+#include "gameObj.h"
+#include "player.h"
 
 using namespace v8;
 
@@ -36,13 +38,18 @@ Handle<Value> Boids::New(const Arguments& args) {
     //double value = args[0]->IsUndefined() ? 0 : args[0]->NumberValue();
     Boids* obj = new Boids();
     obj->Wrap(args.This());
-    for (int i=0;i<800;i++){
-     Vector* pos = new Vector(rand()%30+200,rand()%30+200);
-     Vector* vel = new Vector(rand()%5-2,rand()%5-2);
-     Boid* b = new Boid(*pos,*vel);
+    for (int i=0;i<699;i++){
+     Vector pos(rand()%30+200,rand()%30+200);
+     Vector vel(rand()%5-2,rand()%5-2);
+     Boid* b = new Boid(pos,vel);
      obj->boidset.push_back(b);
     }
+    Vector pos (500,500);
+    Vector vel (0,0);
+    Player* p = new Player(pos,vel);
+    obj->boidset.push_back(p);
     //std::cout<<obj->t<<"\n";
+    //std::cout<<obj->boidset[0]->getPos().x<<"\n";
     return args.This();
   } else {
     // Invoked as plain function `MyObject(...)`, turn into construct call.
@@ -67,19 +74,34 @@ Handle<Value> Boids::GetNextFrame(const Arguments& args){
  double delta = args[0]->NumberValue();
  //std::cout<<delta<<std::endl;
  Local<Array> objList = Array::New();
- for (int i=0;i<obj->boidset.size();i++){
-  obj->boidset[i]->interact(obj->boidset,delta);
+ std::vector<int> keys;
+ //std::cout<<args.Length()<<"\n";
+ Local<Array> v8keys = Local<Array>::Cast(args[1]);
+ //std::cout<<v8keys->Length()<<"ln";
+ for (int i=0; i<v8keys->Length(); i++){
+  keys.push_back(v8keys->Get(i)->NumberValue());
+  //std::cout<<v8keys->Get(i)->NumberValue()<<"\n";
+ }
+ //std::cout<<keys.size()<<"\n";
+ for (int i=0; i<obj->boidset.size(); i++){
+  obj->boidset[i]->interact(obj->boidset, keys, delta);
  }
  for (int i=0;i<obj->boidset.size();i++){
   Local<Object> temp = Object::New();
   //std::cout<<"boid"+i<<"\n";
   char buffer [10];
-  sprintf(buffer, "Boid%d",i);
+  if (i<obj->boidset.size()-1){
+   sprintf(buffer, "Boid%d",i);
+  } else {
+   sprintf(buffer, "Player");
+   temp->Set(String::New("angle"),Number::New(obj->boidset[i]->getAngle()));
+  }
   temp->Set(String::New("xpos"),Number::New(obj->boidset[i]->getPos().x));
   temp->Set(String::New("ypos"),Number::New(obj->boidset[i]->getPos().y));
   temp->Set(String::New("xvel"),Number::New(obj->boidset[i]->getVel().x));
   temp->Set(String::New("yvel"),Number::New(obj->boidset[i]->getVel().y));
   objList->Set(String::New(buffer),temp);
  }
+ 
  return scope.Close(objList);
 }

@@ -4,6 +4,7 @@ function boid(p,v){
  this.goal=new vector(0,0);
  this.rules=[];
  this.time;
+ this.angle=0;
  
  this.separation=function(boidset, c){
   var ans=new vector(0,0);
@@ -130,6 +131,7 @@ function boid(p,v){
  this.set=function(b){
   this.pos=new vector(b.xpos,b.ypos);
   this.vel=new vector(b.xvel,b.yvel);
+  this.angle=b.angle;
  }
  this.setGoal=function(x,y){
   this.goal.set(x,y);

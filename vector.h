@@ -1,3 +1,6 @@
+#ifndef VECTORH
+#define VECTORH
+
 class Vector {
  public:
   double x,y;
@@ -22,3 +25,5 @@ class Vector {
   static Vector sub(Vector,Vector);
   static double dist(Vector,Vector);
 };
+
+#endif

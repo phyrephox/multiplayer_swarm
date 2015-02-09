@@ -1,4 +1,4 @@
-//#include "vector.h"
+#include "vector.h"
 #include "boid.h"
 #include <iostream>
 
@@ -8,13 +8,15 @@ Boid::Boid(){
  rules.erase(rules.begin(),rules.end());
 }
 
-Boid::Boid(Vector p, Vector v){
- pos.set(p);
- vel.set(v);
+Boid::Boid(Vector p, Vector v):
+ GameObj(p,v)
+ {
+ //pos.set(p);
+ //vel.set(v);
  rules.erase(rules.begin(),rules.end());
 }
 
-void Boid::separation(std::vector<Boid*> boidset, double c){
+void Boid::separation(std::vector<GameObj*> boidset, double c){
  Vector ans (0,0);
  for (int i=0;i<boidset.size();i++){
   if (this!=boidset[i]){
@@ -27,7 +29,7 @@ void Boid::separation(std::vector<Boid*> boidset, double c){
  rules.push_back(ans.mult(c));
 }
 
-void Boid::cohesion(std::vector<Boid*> boidset, double c){
+void Boid::cohesion(std::vector<GameObj*> boidset, double c){
  Vector ans (0,0);
  int count=0;
  for (int i=0;i<boidset.size();i++){
@@ -46,7 +48,7 @@ void Boid::cohesion(std::vector<Boid*> boidset, double c){
  rules.push_back(ans.mult(c));
 }
 
-void Boid::adhesion(std::vector<Boid*> boidset, double c){
+void Boid::adhesion(std::vector<GameObj*> boidset, double c){
  Vector ans (0,0);
  int count=0;
  for (int i=0;i<boidset.size();i++){
@@ -82,17 +84,8 @@ void Boid::boundary(double c){
  rules.push_back(ans.mult(c));
 }
 
-Vector Boid::getPos(){
- Vector p (pos);
- return p;
-}
 
-Vector Boid::getVel(){
- Vector v (vel);
- return v;
-}
-
-void Boid::interact(std::vector<Boid*> boidset, double delta){
+void Boid::interact(std::vector<GameObj*> boidset, std::vector<int> keys, double delta){
  rules.erase(rules.begin(),rules.end());
  separation(boidset, 1.2);
  cohesion(boidset, .01);

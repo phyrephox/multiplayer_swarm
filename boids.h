@@ -1,7 +1,10 @@
+#ifndef BOIDS_H
+#define BOIDS_H
+
 #include <node.h>
 #include <vector>
-#include <time.h>
 #include "boid.h"
+#include "gameObj.h"
 
 class Boids : public node::ObjectWrap {
  public:
@@ -15,6 +18,7 @@ class Boids : public node::ObjectWrap {
   static v8::Persistent<v8::Function> constructor;
   static v8::Handle<v8::Value> PlusOne(const v8::Arguments& args);
   static v8::Handle<v8::Value> GetNextFrame(const v8::Arguments& args);
-  //double value;
-  std::vector<Boid*> boidset;
+  std::vector<GameObj*> boidset;
 };
+
+#endif

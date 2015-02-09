@@ -8,7 +8,8 @@ Release/obj.target/addon/boids.o: ../boids.cc \
  /home/alex/.node-gyp/0.10.35/deps/v8/include/v8.h \
  /home/alex/.node-gyp/0.10.35/deps/v8/include/v8stdint.h \
  /home/alex/.node-gyp/0.10.35/src/node_object_wrap.h \
- /home/alex/.node-gyp/0.10.35/src/node.h ../boids.h ../boid.h ../vector.h
+ /home/alex/.node-gyp/0.10.35/src/node.h ../boids.h ../boid.h \
+ ../gameObj.h ../vector.h ../player.h
 ../boids.cc:
 /home/alex/.node-gyp/0.10.35/src/node.h:
 /home/alex/.node-gyp/0.10.35/deps/uv/include/uv.h:
@@ -21,4 +22,6 @@ Release/obj.target/addon/boids.o: ../boids.cc \
 /home/alex/.node-gyp/0.10.35/src/node.h:
 ../boids.h:
 ../boid.h:
+../gameObj.h:
 ../vector.h:
+../player.h:
